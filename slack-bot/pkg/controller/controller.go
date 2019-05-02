@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"SlackBot/slack-bot/pkg/slack"
 	"fmt"
+	"slack-bot/slack-bot/pkg/slack"
 )
 
 // Controller contains connections to Exchange, YouTube and Slack bot.

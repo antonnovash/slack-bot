@@ -6,8 +6,8 @@ import (
 	"log"
 	"net/http"
 
-	"SlackBot/slack-bot/pkg/controller"
 	"github.com/gorilla/mux"
+	"slack-bot/slack-bot/pkg/controller"
 )
 
 // TODO: add logger
@@ -28,8 +28,11 @@ func New(cfg Config, c *controller.Controller) (*Server, error) {
 	}
 	s := &Server{}
 	r := mux.NewRouter()
-	r.Methods(http.MethodPost).Path("/").HandlerFunc(s.Handler)
+	//r.HandleFunc("/",s.Handler)
+	r.HandleFunc("/", s.Handler).Methods(http.MethodPost)
+	//r.Methods(http.MethodPost).Path("/").HandlerFunc(s.Handler)
 	s.controller = c
+	log.Println(cfg.Address)
 	s.server = &http.Server{
 		Addr:    cfg.Address,
 		Handler: r,

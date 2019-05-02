@@ -1,15 +1,15 @@
 package main
 
 import (
-	"SlackBot/slack-bot/pkg/bot"
-	"SlackBot/slack-bot/pkg/controller"
-	"SlackBot/slack-bot/pkg/server"
-	"SlackBot/slack-bot/pkg/slack"
 	"context"
 	"fmt"
 	"log"
 	"os"
 	"os/signal"
+	"slack-bot/slack-bot/pkg/bot"
+	"slack-bot/slack-bot/pkg/controller"
+	"slack-bot/slack-bot/pkg/server"
+	"slack-bot/slack-bot/pkg/slack"
 	"syscall"
 )
 
@@ -52,17 +52,6 @@ func run(config *Config) error {
 	shutdownOnSignal(cancel)
 	errChan := make(chan error, 1)
 	go func() {
-		err := server.Run(ctx)
-		if err != nil {
-			cancel()
-			errChan <- fmt.Errorf("server stopped with error: %v", err)
-			return
-		}
-		errChan <- nil
-
-	}()
-
-	go func() {
 		err = bot.Run(ctx)
 		if err != nil {
 			cancel()
@@ -72,10 +61,21 @@ func run(config *Config) error {
 		errChan <- nil
 	}()
 
+
+
+	go func() {
+		err := server.Run(ctx)
+		if err != nil {
+			cancel()
+			errChan <- fmt.Errorf("server stopped with error: %v", err)
+			return
+		}
+		errChan <- nil
+
+	}()
 	err = <-errChan
 	<-errChan
 	return err
-
 }
 
 func shutdownOnSignal(cancel context.CancelFunc) {
@@ -96,7 +96,7 @@ type Config struct {
 
 // NewConfig returns a Config struct.
 func NewConfig() (*Config, error) {
-	os.Setenv(envSlackToken, "xoxb-617863072727-610208349666-5mGGflFFGXWhePL9kY9TEXwY")
+	os.Setenv(envSlackToken, "xoxb-617863072727-610208349666-459uyzR9foQ30cM1T3yegnmk")
 	os.Setenv(envSlackChannelID, "CJ3UZQ6P7")
 	os.Setenv(envServerAddress, "localhost:9000")
 	c := &Config{

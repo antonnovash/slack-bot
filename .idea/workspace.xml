@@ -5,6 +5,10 @@
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/slack-bot/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/slack-bot/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/slack-bot/pkg/bot/bot.go" beforeDir="false" afterPath="$PROJECT_DIR$/slack-bot/pkg/bot/bot.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/slack-bot/pkg/controller/controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/slack-bot/pkg/controller/controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/slack-bot/pkg/server/handlers.go" beforeDir="false" afterPath="$PROJECT_DIR$/slack-bot/pkg/server/handlers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/slack-bot/pkg/server/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/slack-bot/pkg/server/server.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,20 +18,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/slack-bot/cmd/main.go">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/slack-bot/pkg/controller/events.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+            <state relative-caret-position="345">
+              <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/slack-bot/pkg/controller/events.go">
+        <entry file="file://$PROJECT_DIR$/slack-bot/pkg/controller/controller.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+            <state relative-caret-position="75">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -44,8 +48,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/slack-bot/pkg/slack/slack.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="34" selection-start-line="34" selection-end-line="34" />
+            <state relative-caret-position="285">
+              <caret line="31" column="34" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
               <folding>
                 <element signature="e#15#71#0" expanded="true" />
               </folding>
@@ -56,8 +60,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/slack-bot/pkg/bot/bot.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="203">
-              <caret line="42" column="30" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
+            <state relative-caret-position="165">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
               <folding>
                 <element signature="e#13#117#0" expanded="true" />
               </folding>
@@ -66,43 +70,25 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/slack-bot/pkg/server/config.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="11" selection-start-line="6" selection-start-column="11" selection-end-line="6" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/slack-bot/pkg/server/handlers.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
+            <state relative-caret-position="383">
+              <caret line="87" column="46" selection-start-line="87" selection-start-column="46" selection-end-line="87" selection-end-column="46" />
               <folding>
-                <element signature="e#16#128#0" expanded="true" />
+                <element signature="e#16#131#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/slack-bot/pkg/server/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="48" column="33" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
+            <state relative-caret-position="478">
+              <caret line="36" column="29" lean-forward="true" selection-start-line="36" selection-start-column="29" selection-end-line="36" selection-end-column="29" />
               <folding>
-                <element signature="e#16#140#0" expanded="true" />
+                <element signature="e#16#127#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../github.com/nlopes/slack/websocket_internals.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="44" selection-start-line="44" selection-end-line="44" selection-end-column="75" />
             </state>
           </provider>
         </entry>
@@ -132,12 +118,14 @@
       <find>HandleMessageStart</find>
       <find>go</find>
       <find>invalid credentials</find>
+      <find>SlackBot</find>
     </findStrings>
     <replaceStrings>
       <replace>&quot;</replace>
+      <replace>slack-bot</replace>
     </replaceStrings>
   </component>
-  <component name="GOROOT" path="/snap/go/3540" />
+  <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -146,21 +134,21 @@
       <list>
         <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/cmd/main.go" />
-        <option value="$PROJECT_DIR$/slack-bot/pkg/controller/controller.go" />
         <option value="$PROJECT_DIR$/slack-bot/pkg/slack/config.go" />
         <option value="$PROJECT_DIR$/slack-bot/pkg/controller/events.go" />
+        <option value="$PROJECT_DIR$/slack-bot/pkg/slack/slack.go" />
+        <option value="$PROJECT_DIR$/slack-bot/pkg/controller/controller.go" />
         <option value="$PROJECT_DIR$/slack-bot/pkg/bot/bot.go" />
+        <option value="$PROJECT_DIR$/slack-bot/pkg/server/handlers.go" />
         <option value="$PROJECT_DIR$/slack-bot/pkg/server/server.go" />
         <option value="$PROJECT_DIR$/slack-bot/cmd/main.go" />
-        <option value="$PROJECT_DIR$/slack-bot/pkg/server/handlers.go" />
-        <option value="$PROJECT_DIR$/slack-bot/pkg/slack/slack.go" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="660" />
-    <option name="y" value="59" />
-    <option name="width" value="917" />
+    <option name="x" value="1920" />
+    <option name="y" value="-2" />
+    <option name="width" value="907" />
     <option name="height" value="789" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -174,50 +162,50 @@
         <subPane>
           <expand>
             <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
               <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="cmd" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="pkg" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="pkg" type="462c0819:PsiDirectoryNode" />
               <item name="bot" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="pkg" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="pkg" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="SlackBot" type="b2602c69:ProjectViewProjectNode" />
-              <item name="SlackBot" type="462c0819:PsiDirectoryNode" />
+              <item name="slack-bot" type="b2602c69:ProjectViewProjectNode" />
+              <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="slack-bot" type="462c0819:PsiDirectoryNode" />
               <item name="pkg" type="462c0819:PsiDirectoryNode" />
               <item name="slack" type="462c0819:PsiDirectoryNode" />
@@ -234,7 +222,8 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/slack-bot/pkg" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../news-reader" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -317,24 +306,25 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
+    <frame x="1920" y="-2" width="1920" height="1082" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.255119" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24599786" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3297414" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3286638" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.39870688" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32738718" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3976915" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3297414" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" weight="0.33045357" />
+      <window_info anchor="bottom" id="Terminal" order="10" weight="0.3210913" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="right" id="Mongo Explorer" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -349,33 +339,26 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/slack-bot/pkg/slack/slack.go</url>
-          <line>33</line>
+          <line>31</line>
           <properties />
-          <option name="timeStamp" value="26" />
+          <option name="timeStamp" value="28" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/slack-bot/pkg/server/handlers.go</url>
+          <line>25</line>
+          <properties />
+          <option name="timeStamp" value="48" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/main.go" />
-    <entry file="file:///snap/go/3540/src/fmt/print.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="211" column="5" selection-start-line="211" selection-start-column="5" selection-end-line="211" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///snap/go/3540/src/fmt/print.go" />
     <entry file="file://$PROJECT_DIR$/../github.com/nlopes/slack/channels.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="137">
           <caret line="270" column="1" lean-forward="true" selection-start-line="270" selection-start-column="1" selection-end-line="270" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/gorilla/mux/route.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="347" column="50" lean-forward="true" selection-start-line="347" selection-start-column="50" selection-end-line="347" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -393,20 +376,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///snap/go/3540/src/strings/strings.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="819" column="5" selection-start-line="819" selection-start-column="5" selection-end-line="819" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///snap/go/3540/src/context/context.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="228" column="5" selection-start-line="228" selection-start-column="5" selection-end-line="228" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///snap/go/3540/src/strings/strings.go" />
+    <entry file="file:///snap/go/3540/src/context/context.go" />
     <entry file="file://$PROJECT_DIR$/../github.com/nlopes/slack/attachments.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="246">
@@ -428,20 +399,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/controller/controller.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="10" column="1" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///snap/go/3540/src/runtime/asm_amd64.s">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="1337" selection-start-line="1337" selection-end-line="1337" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///snap/go/3540/src/runtime/asm_amd64.s" />
     <entry file="file://$PROJECT_DIR$/../github.com/nlopes/slack/websocket_managed_conn.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="176">
@@ -449,10 +407,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///snap/go/3540/src/net/http/server.go" />
+    <entry file="file:///snap/go/3540/src/runtime/panic.go" />
     <entry file="file://$PROJECT_DIR$/../github.com/nlopes/slack/websocket_internals.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
+        <state relative-caret-position="615">
           <caret line="44" selection-start-line="44" selection-end-line="44" selection-end-column="75" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/go/src/runtime/panic.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="683" selection-start-line="683" selection-end-line="683" />
         </state>
       </provider>
     </entry>
@@ -463,30 +430,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///snap/go/3540/src/net/http/server.go">
+    <entry file="file://$PROJECT_DIR$/../github.com/nlopes/slack/websocket_misc.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="2784" column="19" selection-start-line="2784" selection-start-column="19" selection-end-line="2784" selection-end-column="19" />
+        <state relative-caret-position="197">
+          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/server/server.go">
+    <entry file="file://$PROJECT_DIR$/../github.com/nlopes/slack/websocket.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="48" column="33" selection-start-line="48" selection-start-column="33" selection-end-line="48" selection-end-column="33" />
+        <state relative-caret-position="189">
+          <caret line="31" column="4" selection-start-line="31" selection-start-column="4" selection-end-line="31" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/gorilla/mux/route.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="125" column="16" selection-start-line="125" selection-start-column="16" selection-end-line="125" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/slack-bot/cmd/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="946">
+          <caret line="107" column="30" lean-forward="true" selection-start-line="107" selection-start-column="30" selection-end-line="107" selection-end-column="30" />
           <folding>
-            <element signature="e#16#140#0" expanded="true" />
+            <element signature="e#14#211#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/server/handlers.go">
+    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/controller/events.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="59" lean-forward="true" selection-start-line="59" selection-end-line="59" />
-          <folding>
-            <element signature="e#16#128#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="345">
+          <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/controller/controller.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
@@ -497,44 +482,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/controller/events.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="23" column="18" selection-start-line="23" selection-start-column="18" selection-end-line="23" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/slack-bot/pkg/slack/slack.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        <state relative-caret-position="285">
+          <caret line="31" column="34" selection-start-line="31" selection-start-column="34" selection-end-line="31" selection-end-column="34" />
           <folding>
             <element signature="e#15#71#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file:///snap/go/3540/src/runtime/panic.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="696" selection-start-line="696" selection-end-line="696" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/slack-bot/pkg/bot/bot.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="42" column="30" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
+        <state relative-caret-position="165">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
           <folding>
             <element signature="e#13#117#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/slack-bot/cmd/main.go">
+    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/server/handlers.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="24" selection-start-line="6" selection-start-column="24" selection-end-line="6" selection-end-column="24" />
+        <state relative-caret-position="383">
+          <caret line="87" column="46" selection-start-line="87" selection-start-column="46" selection-end-line="87" selection-end-column="46" />
+          <folding>
+            <element signature="e#16#131#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/gorilla/mux/mux.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="212" selection-start-line="212" selection-end-line="212" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/go/src/net/http/server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="473">
+          <caret line="1807" selection-start-line="1807" selection-end-line="1807" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/go/src/runtime/asm_amd64.s">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="1333" selection-start-line="1333" selection-end-line="1333" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/slack-bot/pkg/server/server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="478">
+          <caret line="36" column="29" lean-forward="true" selection-start-line="36" selection-start-column="29" selection-end-line="36" selection-end-column="29" />
+          <folding>
+            <element signature="e#16#127#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

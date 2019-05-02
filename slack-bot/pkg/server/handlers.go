@@ -24,6 +24,7 @@ type interactionHandler struct {
 }
 
 func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
+	log.Println("lel")
 	if r.Method != http.MethodPost {
 		log.Printf("[ERROR] Invalid method: %s", r.Method)
 		w.WriteHeader(http.StatusMethodNotAllowed)

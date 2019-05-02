@@ -1,10 +1,10 @@
 package bot
 
 import (
-	"SlackBot/slack-bot/pkg/slack"
 	"context"
 	"fmt"
 	"log"
+	"slack-bot/slack-bot/pkg/slack"
 
 	slackapi "github.com/nlopes/slack"
 )
@@ -37,10 +37,11 @@ func (b *Bot) Run(ctx context.Context) error {
 			}
 			switch event := incomingEvent.Data.(type) {
 			case *slackapi.MessageEvent:
-				if event.Msg.Text=="" {
+				if event.Msg.Text == "a"  {
 					_ = b.slack.HandleMessageButtonEvent(event)
+				} else if event.Msg.Text == "<@UHY64A9KL> start"{
+					_ = b.slack.HandleMessageEvent(event)
 				}
-				_ = b.slack.HandleMessageEvent(event)
 			case *slackapi.RTMError:
 				log.Printf("slack runtime error: %s, %d, %v", event.Msg, event.Code, event.Error())
 			case *slackapi.InvalidAuthEvent:
