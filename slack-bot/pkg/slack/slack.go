@@ -9,7 +9,8 @@ import (
 
 const (
 	// action is used for slack attament action.
-	actionSelect = "select"
+	actionSelectMonth = "selectMonth"
+	actionSelectDays = "selectMonth"
 	actionStart  = "start"
 	actionCancel = "cancel"
 )
@@ -29,19 +30,6 @@ func New(c Config) (*SlackListener, error) {
 	return &SlackListener{client: client, channelID: c.ChannelID, rtm: rtm}, nil
 }
 // handleMesageEvent handles message events.
-func (s *SlackListener) HandleMessageButtonEvent(ev *slack.MessageEvent) error {
-
-	botCommand := strings.Split(strings.TrimSpace(ev.Msg.Text), " ")[1:]
-	switch botCommand[0] {
-	case "start":
-		_ = s.HandleMessageStart(ev)
-
-		/*case"custom":
-		_ = s.HandleMessageCustom(ev)
-		*/
-	}
-	return nil
-}
 
 // handleMesageEvent handles message events.
 func (s *SlackListener) HandleMessageEvent(ev *slack.MessageEvent) error {
@@ -60,6 +48,7 @@ func (s *SlackListener) HandleMessageEvent(ev *slack.MessageEvent) error {
 	case "start":
 		_ = s.HandleMessageStart(ev)
 
+
 	/*case"custom":
 		_ = s.HandleMessageCustom(ev)
 */
@@ -68,13 +57,89 @@ func (s *SlackListener) HandleMessageEvent(ev *slack.MessageEvent) error {
 }
 func (s *SlackListener) HandleMessageStart(ev *slack.MessageEvent) error {
 	// value is passed to message handler when request is approved.
-	attachment := slack.Attachment{
-		Text:       "Which beer do you want? :beer:",
+	attachmentMonth := slack.Attachment{
+		Text:       "Chose the month,please:thinking_cat_face:",
+		Color:      "#f9a41b",
+		CallbackID: "Month",
+		Actions: []slack.AttachmentAction{
+			{
+				Name: actionSelectMonth,
+				Type: "select",
+				Options: []slack.AttachmentActionOption{
+					{
+						Text:  "January",
+						Value: "January",
+					},
+					{
+						Text:  "February",
+						Value: "February",
+					},
+					{
+						Text:  "March",
+						Value: "March",
+					},
+					{
+						Text:  "April",
+						Value: "April",
+					},
+					{
+						Text:  "May",
+						Value: "May",
+					},
+					{
+						Text:  "June",
+						Value: "June",
+					},
+					{
+						Text:  "July",
+						Value: "July",
+					},
+					{
+						Text:  "Aughts",
+						Value: "Aughts",
+					},
+					{
+						Text:  "September",
+						Value: "September",
+					},
+					{
+						Text:  "October",
+						Value: "October",
+					},
+					{
+						Text:  "November",
+						Value: "November",
+					},
+					{
+						Text:  "December",
+						Value: "December",
+					},
+
+				},
+
+			},
+
+			/*{
+				Name:  actionStart,
+				Text:  "start",
+				Type:  "button",
+				Style: "default",
+			},
+			{
+				Name:  actionCancel,
+				Text:  "Cancel",
+				Type:  "button",
+				Style: "danger",
+			},*/
+		},
+	}
+	attachmentDays := slack.Attachment{
+		Text:       " Days:beer:",
 		Color:      "#f9a41b",
 		CallbackID: "beer",
 		Actions: []slack.AttachmentAction{
 			{
-				Name: actionSelect,
+				Name: actionSelectDays,
 				Type: "select",
 				Options: []slack.AttachmentActionOption{
 					{
@@ -98,8 +163,10 @@ func (s *SlackListener) HandleMessageStart(ev *slack.MessageEvent) error {
 						Value: "Yona Yona Ale",
 					},
 				},
+
 			},
-			{
+
+			/*{
 				Name:  actionStart,
 				Text:  "start",
 				Type:  "button",
@@ -110,15 +177,19 @@ func (s *SlackListener) HandleMessageStart(ev *slack.MessageEvent) error {
 				Text:  "Cancel",
 				Type:  "button",
 				Style: "danger",
-			},
+			},*/
 		},
 	}
 
-	params := slack.MsgOptionAttachments(attachment)
-
-	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("", false), params); err != nil {
+	paramsMonth := slack.MsgOptionAttachments(attachmentMonth)
+	paramsDays := slack.MsgOptionAttachments(attachmentDays)
+	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("А что мы видим?", false), paramsMonth); err != nil {
 		return fmt.Errorf("failed to post message: %s", err)
 	}
+	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("А что мы видим?", false), paramsDays); err != nil {
+		return fmt.Errorf("failed to post message: %s", err)
+	}
+
 
 	return nil
 }
