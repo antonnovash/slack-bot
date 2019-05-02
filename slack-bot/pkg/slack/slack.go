@@ -31,7 +31,6 @@ func New(c Config) (*SlackListener, error) {
 // handleMesageEvent handles message events.
 func (s *SlackListener) HandleMessageButtonEvent(ev *slack.MessageEvent) error {
 
-
 	botCommand := strings.Split(strings.TrimSpace(ev.Msg.Text), " ")[1:]
 	switch botCommand[0] {
 	case "start":

@@ -10,18 +10,20 @@ import (
 	"net/url"
 	"strings"
 )
+
 const (
 	// action is used for slack attament action.
 	actionSelect = "select"
 	actionStart  = "start"
 	actionCancel = "cancel"
 )
+
 type interactionHandler struct {
 	slackClient       *slack.Client
 	verificationToken string
 }
 
-func (s *Server) HandlerMethod(w http.ResponseWriter, r *http.Request) {
+func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		log.Printf("[ERROR] Invalid method: %s", r.Method)
 		w.WriteHeader(http.StatusMethodNotAllowed)

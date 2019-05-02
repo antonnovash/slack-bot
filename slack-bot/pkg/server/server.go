@@ -28,7 +28,7 @@ func New(cfg Config, c *controller.Controller) (*Server, error) {
 	}
 	s := &Server{}
 	r := mux.NewRouter()
-	r.Methods(http.MethodPost).Path("/").HandlerFunc(s.HandlerMethod)
+	r.Methods(http.MethodPost).Path("/").HandlerFunc(s.Handler)
 	s.controller = c
 	s.server = &http.Server{
 		Addr:    cfg.Address,

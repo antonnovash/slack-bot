@@ -2,6 +2,8 @@ package main
 
 import (
 	"SlackBot/slack-bot/pkg/bot"
+	"SlackBot/slack-bot/pkg/controller"
+	"SlackBot/slack-bot/pkg/server"
 	"SlackBot/slack-bot/pkg/slack"
 	"context"
 	"fmt"
@@ -15,6 +17,7 @@ import (
 const (
 	envSlackChannelID = "SLACK_CHANNEL"
 	envSlackToken     = "SLACK_TOKEN"
+	envServerAddress  = "SERVER_ADDRESS"
 )
 
 func main() {
@@ -38,11 +41,18 @@ func run(config *Config) error {
 	if err != nil {
 		return fmt.Errorf("cannot create a bot: %v", err)
 	}
-
+	controller := &controller.Controller{
+		Slack: slack,
+	}
+	server, err := server.New(config.Server, controller)
+	if err != nil {
+		return fmt.Errorf("cannot create a server: %v", err)
+	}
 	ctx, cancel := context.WithCancel(context.Background())
 	shutdownOnSignal(cancel)
 	errChan := make(chan error, 1)
-/*	go func() {
+	go func() {
+		err := server.Run(ctx)
 		if err != nil {
 			cancel()
 			errChan <- fmt.Errorf("server stopped with error: %v", err)
@@ -50,7 +60,8 @@ func run(config *Config) error {
 		}
 		errChan <- nil
 
-	}()*/
+	}()
+
 	go func() {
 		err = bot.Run(ctx)
 		if err != nil {
@@ -60,9 +71,11 @@ func run(config *Config) error {
 		}
 		errChan <- nil
 	}()
+
 	err = <-errChan
 	<-errChan
 	return err
+
 }
 
 func shutdownOnSignal(cancel context.CancelFunc) {
@@ -75,20 +88,25 @@ func shutdownOnSignal(cancel context.CancelFunc) {
 	}()
 }
 
-
 // Config stores info from env vars.
 type Config struct {
-	Slack slack.Config
+	Slack  slack.Config
+	Server server.Config
 }
+
 // NewConfig returns a Config struct.
 func NewConfig() (*Config, error) {
-	os.Setenv(envSlackToken, "xoxb-617863072727-610208349666-j8yCGWNWpyTWfPK8r5p1atu6")
+	os.Setenv(envSlackToken, "xoxb-617863072727-610208349666-5mGGflFFGXWhePL9kY9TEXwY")
 	os.Setenv(envSlackChannelID, "CJ3UZQ6P7")
+	os.Setenv(envServerAddress, "localhost:9000")
 	c := &Config{
 
 		Slack: slack.Config{
 			Token:     os.Getenv(envSlackToken),
 			ChannelID: os.Getenv(envSlackChannelID),
+		},
+		Server: server.Config{
+			Address: os.Getenv(envServerAddress),
 		},
 	}
 	err := c.validate()
