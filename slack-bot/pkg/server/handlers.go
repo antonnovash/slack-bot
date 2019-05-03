@@ -13,7 +13,7 @@ import (
 
 const (
 	// action is used for slack attament action.
-	actionSelect = "select"
+	actionSelect = "selectMonth"
 	actionStart  = "start"
 	actionCancel = "cancel"
 )

@@ -96,7 +96,7 @@ type Config struct {
 
 // NewConfig returns a Config struct.
 func NewConfig() (*Config, error) {
-	os.Setenv(envSlackToken, "xoxb-617863072727-610208349666-23TXZfsv9kTY8SjhxGE2rLkt")
+	os.Setenv(envSlackToken, "xoxb-617863072727-610208349666-iEJdkjMIiWcQIPC27GNMHSR5")
 	os.Setenv(envSlackChannelID, "CJ3UZQ6P7")
 	os.Setenv(envServerAddress, "localhost:9000")
 	c := &Config{
