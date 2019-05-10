@@ -3,12 +3,15 @@ package server
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/dghubble/sling"
 	"github.com/nlopes/slack"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
+	"time"
 )
 
 const (
@@ -117,4 +120,55 @@ func responseMessage(w http.ResponseWriter, original slack.Message, title, value
 	w.Header().Add("Content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&original)
+}
+
+type team struct {
+	ID    string `gorm:"primary_key"`
+	Name  string
+	Scope string `json:"scope"`
+	Token string
+}
+
+type slackOauthRequestParams struct {
+	ClientID     string `url:"client_id,omitempty"`
+	ClientSecret string `url:"client_secret,omitempty"`
+	Code         string `url:"code,omitempty"`
+}
+type slackOauthRequestResponse struct {
+	AccessToken string `json:"access_token"`
+	Scope       string `json:"scope"`
+	TeamName    string `json:"team_name"`
+	TeamID      string `json:"team_id"`
+}
+
+func generateOAuthRequest(code string) (request *http.Request, err error) {
+	os.Setenv("SLACK_CLIENT_ID", "617863072727.609868118610")
+	os.Setenv("SLACK_CLIENT_SECRET","a39e1d00bbe6ce9a88c191391108600c")
+	params := slackOauthRequestParams{
+		ClientID:     os.Getenv("SLACK_CLIENT_ID"),
+		ClientSecret: os.Getenv("SLACK_CLIENT_SECRET")}
+
+	request, err = sling.New().Get("https://slack.com/oauth/authorize").QueryStruct(params).Request()
+	fmt.Println(request)
+	return
+}
+
+func (s *Server) Auth(writer http.ResponseWriter, request *http.Request) {
+		defer request.Body.Close()
+
+		code := request.URL.Query().Get("code")
+		oAuthRequest, err := generateOAuthRequest(code)
+		if err != nil {
+			http.Error(writer, fmt.Sprintf("Failed to create OAuth Token request: %v", err), 501)
+
+			errorMessage := fmt.Sprintf("Failed to create OAuth Token request, parameters: %v", request)
+			log.Fatal(errorMessage)
+			http.Error(writer, errorMessage, 501)
+			return
+		}
+		var client = &http.Client{
+			Timeout: time.Second * 10,
+		}
+		_, err = client.Do(oAuthRequest)
+		return
 }

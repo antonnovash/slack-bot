@@ -30,6 +30,7 @@ func New(cfg Config, c *controller.Controller) (*Server, error) {
 	r := mux.NewRouter()
 	//r.HandleFunc("/",s.Handler)
 	r.HandleFunc("/", s.Handler).Methods(http.MethodPost)
+	r.HandleFunc("/auth",s.Auth).Methods(http.MethodGet)
 	//r.Methods(http.MethodPost).Path("/").HandlerFunc(s.Handler)
 	s.controller = c
 	log.Println(cfg.Address)

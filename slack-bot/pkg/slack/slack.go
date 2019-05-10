@@ -125,3 +125,9 @@ func (s *SlackListener) HandleMessageStart(ev *slack.MessageEvent) error {
 
 	return nil
 }
+
+type OAuthResponseBot struct {
+	BotUserID      string `json:"bot_user_id"`
+	BotAccessToken string `json:"bot_access_token"`
+}
+
