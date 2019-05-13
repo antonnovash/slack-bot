@@ -2,9 +2,9 @@ package slack
 
 import (
 	"fmt"
-	"strings"
-
 	"github.com/nlopes/slack"
+	"golang.org/x/oauth2"
+	"strings"
 )
 
 type SlackListener struct {
@@ -12,6 +12,15 @@ type SlackListener struct {
 	channelID string
 	rtm       *slack.RTM
 }
+
+// Endpoint is Slack's OAuth 2.0 endpoint.
+var Endpoint = oauth2.Endpoint{
+	AuthURL:  "https://slack.com/oauth/authorize",
+	TokenURL: "https://slack.com/api/oauth.access",
+}
+var slackOuthConfig *oauth2.Config
+
+
 
 func New(c Config) (*SlackListener, error) {
 	if err := c.Validate(); err != nil {

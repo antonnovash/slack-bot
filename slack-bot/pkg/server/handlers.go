@@ -1,17 +1,19 @@
 package server
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"github.com/dghubble/sling"
 	"github.com/nlopes/slack"
+	"golang.org/x/oauth2"
 	"io/ioutil"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
-	"time"
 )
 
 const (
@@ -132,8 +134,10 @@ type team struct {
 type slackOauthRequestParams struct {
 	ClientID     string `url:"client_id,omitempty"`
 	ClientSecret string `url:"client_secret,omitempty"`
-	Code         string `url:"code,omitempty"`
+	Scope        string `url:"scope,omitempty"`
+	RedirectUri  string `url:"redirect_uri,omitempty"`
 }
+
 type slackOauthRequestResponse struct {
 	AccessToken string `json:"access_token"`
 	Scope       string `json:"scope"`
@@ -141,34 +145,191 @@ type slackOauthRequestResponse struct {
 	TeamID      string `json:"team_id"`
 }
 
-func generateOAuthRequest(code string) (request *http.Request, err error) {
-	os.Setenv("SLACK_CLIENT_ID", "617863072727.609868118610")
-	os.Setenv("SLACK_CLIENT_SECRET","a39e1d00bbe6ce9a88c191391108600c")
+func generateOAuthRequest() (request *http.Request, err error)  {
+	_ = os.Setenv("SLACK_CLIENT_ID", "617863072727.609868118610")
+	_ = os.Setenv("SLACK_CLIENT_SECRET", "a39e1d00bbe6ce9a88c191391108600c")
 	params := slackOauthRequestParams{
 		ClientID:     os.Getenv("SLACK_CLIENT_ID"),
-		ClientSecret: os.Getenv("SLACK_CLIENT_SECRET")}
-
+		ClientSecret: os.Getenv("SLACK_CLIENT_SECRET"),
+		Scope:        "commands,users:read",
+	}
 	request, err = sling.New().Get("https://slack.com/oauth/authorize").QueryStruct(params).Request()
 	fmt.Println(request)
-	return
+	if err != nil {
+		fmt.Println("Bad request", err)
+	}
+	return request, nil
 }
 
 func (s *Server) Auth(writer http.ResponseWriter, request *http.Request) {
-		defer request.Body.Close()
+	oAuthRequest, err := generateOAuthRequest()
+	fmt.Println(oAuthRequest)
+	defer request.Body.Close()
+	if err != nil {
+		http.Error(writer, fmt.Sprintf("Failed to create OAuth Token request: %v", err), 501)
 
-		code := request.URL.Query().Get("code")
-		oAuthRequest, err := generateOAuthRequest(code)
+		errorMessage := fmt.Sprintf("Failed to create OAuth Token request, parameters: %v", request)
+		log.Fatal(errorMessage)
+		http.Error(writer, errorMessage, 501)
+		return
+	}
+	/*var client = &http.Client{
+		Timeout: time.Second * 10,
+	}
+	req, err := http.NewRequest("GET", "https://7247b66d.ngrok.io", nil)
+	code := req.URL.Query()
+	fmt.Println(code)
+	response, err := client.Do(req)
+	if response.StatusCode == http.StatusFound {
+		fmt.Println(response.Location())
+	}*/
+	//fmt.Println(code)
+	return
+}
+
+// addToSlack initializes the oauth process and redirects to Slack
+func (s *Server) addToSlack(w http.ResponseWriter, r *http.Request)  {
+	_ = os.Setenv("SLACK_CLIENT_ID", "617863072727.609868118610")
+	_ = os.Setenv("SLACK_CLIENT_SECRET", "a39e1d00bbe6ce9a88c191391108600c")
+	// Just generate random state
+	b := make([]byte, 10)
+	_, err := rand.Read(b)
+	if err != nil {
+		writeError(w, 500, err.Error())
+	}
+	globalState := hex.EncodeToString(b)
+	conf := &oauth2.Config{
+		ClientID:     os.Getenv("SLACK_CLIENT_ID"),
+		ClientSecret: os.Getenv("SLACK_CLIENT_SECRET"),
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  "https://slack.com/oauth/authorize",
+			TokenURL: "https://slack.com/api/oauth.access", // not actually used here
+		},
+		RedirectURL: "https://localhost:9000/auth",
+		Scopes:       []string{"client"},
+	}
+	url := conf.AuthCodeURL(globalState)
+	fmt.Println(url)
+	http.Redirect(w, r, url, http.StatusFound)
+}
+func writeError(w http.ResponseWriter, status int, err string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	w.Write([]byte(err))
+}
+
+// auth receives the callback from Slack, validates and displays the user information
+func (s *Server) auth(w http.ResponseWriter, r *http.Request) {
+	state := r.FormValue("state")
+	code := r.FormValue("code")
+	errStr := r.FormValue("error")
+	if errStr != "" {
+		writeError(w, 401, errStr)
+		return
+	}
+	if state == "" || code == "" {
+		writeError(w, 400, "Missing state or code")
+		return
+	}
+	client := http.Client{
+	}
+	token, _, err := slack.GetOAuthToken(&client, os.Getenv("SLACK_CLIENT_ID"), os.Getenv("SLACK_CLIENT_SECRET"), code, "")
+	//slack.OAuthAccess(os.Getenv("SLACK_CLIENT_ID"),os.Getenv("SLACK_CLIENT_SECRET"), code, "")
+	fmt.Println(token)
+	if err != nil {
+		writeError(w, 401, err.Error())
+		return
+	}
+	/*	s, err := slack.New(slack.SetToken(token.AccessToken))
 		if err != nil {
-			http.Error(writer, fmt.Sprintf("Failed to create OAuth Token request: %v", err), 501)
-
-			errorMessage := fmt.Sprintf("Failed to create OAuth Token request, parameters: %v", request)
-			log.Fatal(errorMessage)
-			http.Error(writer, errorMessage, 501)
+			writeError(w, 500, err.Error())
 			return
 		}
-		var client = &http.Client{
-			Timeout: time.Second * 10,
-		}
-		_, err = client.Do(oAuthRequest)
-		return
+		// Get our own user id
+		test, err := s.AuthTest()
+		if err != nil {
+			writeError(w, 500, err.Error())
+			return
+		}*/
+	//w.Write([]byte(fmt.Sprintf("OAuth successful for team %s and user %s", test.Team, test.User)))
 }
+
+// home displays the add-to-slack button
+func (s *Server) home(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(`<html><head><title>Slack OAuth Test</title></head><body><a href="/add">Add To Slack</a></body></html>`))
+}
+
+/*var (
+	address      = flag.String("address", ":8888", "Which address should I listen on")
+	clientID     = flag.String("client_id", "", "The client ID from https://api.slack.com/applications")
+	clientSecret = flag.String("client_secret", "", "The client secret from https://api.slack.com/applications")
+)
+
+type state struct {
+	auth string
+	ts   time.Time
+}
+
+// globalState is an example of how to store a state between calls
+var globalState state
+
+// writeError writes an error to the reply - example only
+
+
+// auth receives the callback from Slack, validates and displays the user information
+func auth(w http.ResponseWriter, r *http.Request) {
+	state := r.FormValue("state")
+	code := r.FormValue("code")
+	errStr := r.FormValue("error")
+	if errStr != "" {
+		writeError(w, 401, errStr)
+		return
+	}
+	if state == "" || code == "" {
+		writeError(w, 400, "Missing state or code")
+		return
+	}
+	if state != globalState.auth {
+		writeError(w, 403, "State does not match")
+		return
+	}
+	// As an example, we allow only 5 min between requests
+	if time.Since(globalState.ts) > 5*time.Minute {
+		writeError(w, 403, "State is too old")
+		return
+	}
+	token, err := slack.OAuthAccess(*clientID, *clientSecret, code, "")
+	if err != nil {
+		writeError(w, 401, err.Error())
+		return
+	}
+	s, err := slack.New(slack.SetToken(token.AccessToken))
+	if err != nil {
+		writeError(w, 500, err.Error())
+		return
+	}
+	// Get our own user id
+	test, err := s.AuthTest()
+	if err != nil {
+		writeError(w, 500, err.Error())
+		return
+	}
+	w.Write([]byte(fmt.Sprintf("OAuth successful for team %s and user %s", test.Team, test.User)))
+}
+
+// home displays the add-to-slack button
+func home(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte(`<html><head><title>Slack OAuth Test</title></head><body><a href="/add">Add To Slack</a></body></html>`))
+}
+
+func main() {
+	flag.Parse()
+	if *clientID == "" || *clientSecret == "" {
+		fmt.Println("You must specify the client ID and client secret from https://api.slack.com/applications")
+		os.Exit(1)
+	}
+	http.HandleFunc("/add", addToSlack)
+	http.HandleFunc("/auth", auth)
+	http.HandleFunc("/", home)
+	log.Fatal(http.ListenAndServe(*address, nil))
+}*/
