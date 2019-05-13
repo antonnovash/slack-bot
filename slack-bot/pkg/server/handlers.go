@@ -7,6 +7,7 @@ import (
 	"github.com/dghubble/sling"
 	"github.com/nlopes/slack"
 	"golang.org/x/oauth2"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"math/rand"
@@ -18,9 +19,10 @@ import (
 
 const (
 	// action is used for slack attament action.
-	actionSelect = "selectMonth"
-	actionStart  = "start"
-	actionCancel = "cancel"
+	actionSelectMonth = "selectMonth"
+	actionStart       = "start"
+	actionCancel      = "cancel"
+	envSlackToken     = "SLACK_TOKEN"
 )
 
 type interactionHandler struct {
@@ -66,7 +68,7 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 
 	action := message.Actions[0]
 	switch action.Name {
-	case actionSelect:
+	case actionSelectMonth:
 		value := action.SelectedOptions[0].Value
 
 		// Overwrite original drop down message.
@@ -145,7 +147,7 @@ type slackOauthRequestResponse struct {
 	TeamID      string `json:"team_id"`
 }
 
-func generateOAuthRequest() (request *http.Request, err error)  {
+func generateOAuthRequest() (request *http.Request, err error) {
 	_ = os.Setenv("SLACK_CLIENT_ID", "617863072727.609868118610")
 	_ = os.Setenv("SLACK_CLIENT_SECRET", "a39e1d00bbe6ce9a88c191391108600c")
 	params := slackOauthRequestParams{
@@ -188,7 +190,7 @@ func (s *Server) Auth(writer http.ResponseWriter, request *http.Request) {
 }
 
 // addToSlack initializes the oauth process and redirects to Slack
-func (s *Server) addToSlack(w http.ResponseWriter, r *http.Request)  {
+func (s *Server) addToSlack(w http.ResponseWriter, r *http.Request) {
 	_ = os.Setenv("SLACK_CLIENT_ID", "617863072727.609868118610")
 	_ = os.Setenv("SLACK_CLIENT_SECRET", "a39e1d00bbe6ce9a88c191391108600c")
 	// Just generate random state
@@ -205,8 +207,8 @@ func (s *Server) addToSlack(w http.ResponseWriter, r *http.Request)  {
 			AuthURL:  "https://slack.com/oauth/authorize",
 			TokenURL: "https://slack.com/api/oauth.access", // not actually used here
 		},
-		RedirectURL: "https://localhost:9000/auth",
-		Scopes:       []string{"client"},
+		RedirectURL: "http://localhost:9000/auth",
+		Scopes:      []string{"client"},
 	}
 	url := conf.AuthCodeURL(globalState)
 	fmt.Println(url)
@@ -231,79 +233,15 @@ func (s *Server) auth(w http.ResponseWriter, r *http.Request) {
 		writeError(w, 400, "Missing state or code")
 		return
 	}
-	client := http.Client{
-	}
+	client := http.Client{}
 	token, _, err := slack.GetOAuthToken(&client, os.Getenv("SLACK_CLIENT_ID"), os.Getenv("SLACK_CLIENT_SECRET"), code, "")
-	//slack.OAuthAccess(os.Getenv("SLACK_CLIENT_ID"),os.Getenv("SLACK_CLIENT_SECRET"), code, "")
 	fmt.Println(token)
 	if err != nil {
-		writeError(w, 401, err.Error())
+		fmt.Println("Don't set Bot User OAuth Access Token")
 		return
 	}
-	/*	s, err := slack.New(slack.SetToken(token.AccessToken))
-		if err != nil {
-			writeError(w, 500, err.Error())
-			return
-		}
-		// Get our own user id
-		test, err := s.AuthTest()
-		if err != nil {
-			writeError(w, 500, err.Error())
-			return
-		}*/
-	//w.Write([]byte(fmt.Sprintf("OAuth successful for team %s and user %s", test.Team, test.User)))
-}
-
-// home displays the add-to-slack button
-func (s *Server) home(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(`<html><head><title>Slack OAuth Test</title></head><body><a href="/add">Add To Slack</a></body></html>`))
-}
-
-/*var (
-	address      = flag.String("address", ":8888", "Which address should I listen on")
-	clientID     = flag.String("client_id", "", "The client ID from https://api.slack.com/applications")
-	clientSecret = flag.String("client_secret", "", "The client secret from https://api.slack.com/applications")
-)
-
-type state struct {
-	auth string
-	ts   time.Time
-}
-
-// globalState is an example of how to store a state between calls
-var globalState state
-
-// writeError writes an error to the reply - example only
-
-
-// auth receives the callback from Slack, validates and displays the user information
-func auth(w http.ResponseWriter, r *http.Request) {
-	state := r.FormValue("state")
-	code := r.FormValue("code")
-	errStr := r.FormValue("error")
-	if errStr != "" {
-		writeError(w, 401, errStr)
-		return
-	}
-	if state == "" || code == "" {
-		writeError(w, 400, "Missing state or code")
-		return
-	}
-	if state != globalState.auth {
-		writeError(w, 403, "State does not match")
-		return
-	}
-	// As an example, we allow only 5 min between requests
-	if time.Since(globalState.ts) > 5*time.Minute {
-		writeError(w, 403, "State is too old")
-		return
-	}
-	token, err := slack.OAuthAccess(*clientID, *clientSecret, code, "")
-	if err != nil {
-		writeError(w, 401, err.Error())
-		return
-	}
-	s, err := slack.New(slack.SetToken(token.AccessToken))
+	chToken <- token
+	/*s, err := slack.New(slack.SetToken(token.AccessToken))
 	if err != nil {
 		writeError(w, 500, err.Error())
 		return
@@ -313,23 +251,26 @@ func auth(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		writeError(w, 500, err.Error())
 		return
-	}
-	w.Write([]byte(fmt.Sprintf("OAuth successful for team %s and user %s", test.Team, test.User)))
+	}*/
+	//w.Write([]byte(fmt.Sprintf("OAuth successful for team %s and user %s", test.Team, test.User)))
+}
+
+type data struct {
+	header    string
+	shortInfo string
 }
 
 // home displays the add-to-slack button
-func home(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte(`<html><head><title>Slack OAuth Test</title></head><body><a href="/add">Add To Slack</a></body></html>`))
+func (s *Server) home(w http.ResponseWriter, r *http.Request) {
+	text := data{
+		header:    "Install SlackBot",
+		shortInfo: "This Slack OAuth button allows users to install the RoomBot to their Slack workspace",
+	}
+	fmt.Println(text)
+	tmpl, err := template.ParseFiles("slack-bot/pkg/server/SlackAuth.html")
+	if err != nil {
+		log.Fatal("Bad parse html")
+	}
+	err = tmpl.Execute(w, "")
 }
 
-func main() {
-	flag.Parse()
-	if *clientID == "" || *clientSecret == "" {
-		fmt.Println("You must specify the client ID and client secret from https://api.slack.com/applications")
-		os.Exit(1)
-	}
-	http.HandleFunc("/add", addToSlack)
-	http.HandleFunc("/auth", auth)
-	http.HandleFunc("/", home)
-	log.Fatal(http.ListenAndServe(*address, nil))
-}*/

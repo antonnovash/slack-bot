@@ -46,6 +46,9 @@ func (s *SlackListener) HandleMessageEvent(ev *slack.MessageEvent) error {
 		return nil
 	}*/
 	botCommand := strings.Split(strings.TrimSpace(ev.Msg.Text), " ")[1:]
+	if botCommand == nil {
+		return nil
+	}
 	switch botCommand[0] {
 	case "start":
 		_ = s.HandleMessageStart(ev)

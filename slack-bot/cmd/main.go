@@ -61,8 +61,6 @@ func run(config *Config) error {
 		errChan <- nil
 	}()
 
-
-
 	go func() {
 		err := server.Run(ctx)
 		if err != nil {
@@ -71,7 +69,6 @@ func run(config *Config) error {
 			return
 		}
 		errChan <- nil
-
 	}()
 	err = <-errChan
 	<-errChan
@@ -96,7 +93,7 @@ type Config struct {
 
 // NewConfig returns a Config struct.
 func NewConfig() (*Config, error) {
-	os.Setenv(envSlackToken, "xoxb-617863072727-610208349666-C2yCcjmRaXtUPgx47eV0mrNl")
+	os.Setenv(envSlackToken, "xoxp-617863072727-604564212419-623477245798-2c167b61cb85cc4666cbe894253ed339")
 	os.Setenv(envSlackChannelID, "CJ3UZQ6P7")
 	os.Setenv(envServerAddress, "localhost:9000")
 	c := &Config{
