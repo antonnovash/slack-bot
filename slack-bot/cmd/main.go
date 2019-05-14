@@ -19,6 +19,11 @@ const (
 	envSlackToken     = "SLACK_TOKEN"
 	envServerAddress  = "SERVER_ADDRESS"
 )
+// Config stores info from env vars.
+type Config struct {
+	Slack  slack.Config
+	Server server.Config
+}
 
 func main() {
 	config, err := NewConfig()
@@ -44,7 +49,9 @@ func run(config *Config) error {
 	controller := &controller.Controller{
 		Slack: slack,
 	}
-	server, err := server.New(config.Server, controller)
+	myChan := make(chan string)
+
+	server, err := server.New(config.Server, controller, myChan)
 	if err != nil {
 		return fmt.Errorf("cannot create a server: %v", err)
 	}
@@ -52,8 +59,11 @@ func run(config *Config) error {
 	shutdownOnSignal(cancel)
 	errChan := make(chan error, 1)
 	go func() {
+		//config.Slack.Token =  <-myChan
+		token :=  <-myChan
+		fmt.Println(token)
 		err = bot.Run(ctx)
-		if err != nil {
+				if err != nil {
 			cancel()
 			errChan <- fmt.Errorf("bot stopped with error: %v", err)
 			return
@@ -85,21 +95,13 @@ func shutdownOnSignal(cancel context.CancelFunc) {
 	}()
 }
 
-// Config stores info from env vars.
-type Config struct {
-	Slack  slack.Config
-	Server server.Config
-}
-
 // NewConfig returns a Config struct.
 func NewConfig() (*Config, error) {
-	os.Setenv(envSlackToken, "xoxp-617863072727-604564212419-623477245798-2c167b61cb85cc4666cbe894253ed339")
 	os.Setenv(envSlackChannelID, "CJ3UZQ6P7")
 	os.Setenv(envServerAddress, "localhost:9000")
 	c := &Config{
 
 		Slack: slack.Config{
-			Token:     os.Getenv(envSlackToken),
 			ChannelID: os.Getenv(envSlackChannelID),
 		},
 		Server: server.Config{

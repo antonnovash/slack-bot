@@ -10,24 +10,22 @@ import (
 	"slack-bot/slack-bot/pkg/controller"
 )
 
-// TODO: add logger
-var chToken = make(chan string, 1)
 // Server handles incoming requests from Google Forms.
 type Server struct {
 	server     *http.Server
 	controller *controller.Controller
-	botToken   string
+	chToken    chan<- string
 }
 
 // New creates a new instance of Server which is HTTP server with custom handler and a controller.
-func New(cfg Config, c *controller.Controller) (*Server, error) {
+func New(cfg Config, c *controller.Controller, chToken chan<- string) (*Server, error) {
 	if err := cfg.Validate(); err != nil {
-		return nil,fmt.Errorf("config is invalid: %v", err)
+		return nil, fmt.Errorf("config is invalid: %v", err)
 	}
 	if err := c.Validate(); err != nil {
 		return nil, fmt.Errorf("controller is invalid: %v", err)
 	}
-	s := &Server{}
+	s := &Server{chToken: chToken}
 	r := mux.NewRouter()
 	//r.HandleFunc("/",s.Handler)
 	r.HandleFunc("/", s.Handler).Methods(http.MethodPost)

@@ -10,9 +10,9 @@ type Config struct {
 
 // Validate validates Slack bot config.
 func (c Config) Validate() error {
-	if c.Token == "" {
+	/*if c.Token == "" {
 		return fmt.Errorf("slack bot token env variable isn't set: %s", c.Token)
-	}
+	}*/
 	if c.ChannelID == "" {
 		return fmt.Errorf("slack channel ID env variable isn't set: %s", c.ChannelID)
 	}

@@ -240,19 +240,7 @@ func (s *Server) auth(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Don't set Bot User OAuth Access Token")
 		return
 	}
-	chToken <- token
-	/*s, err := slack.New(slack.SetToken(token.AccessToken))
-	if err != nil {
-		writeError(w, 500, err.Error())
-		return
-	}
-	// Get our own user id
-	test, err := s.AuthTest()
-	if err != nil {
-		writeError(w, 500, err.Error())
-		return
-	}*/
-	//w.Write([]byte(fmt.Sprintf("OAuth successful for team %s and user %s", test.Team, test.User)))
+	s.chToken <- token
 }
 
 type data struct {
@@ -273,4 +261,3 @@ func (s *Server) home(w http.ResponseWriter, r *http.Request) {
 	}
 	err = tmpl.Execute(w, "")
 }
-
