@@ -10,6 +10,8 @@ import (
 	"slack-bot/slack-bot/pkg/controller"
 )
 
+// TODO: add logger
+//var chToken = make(chan string, 1)
 // Server handles incoming requests from Google Forms.
 type Server struct {
 	server     *http.Server
@@ -25,7 +27,7 @@ func New(cfg Config, c *controller.Controller, chToken chan<- string) (*Server, 
 	if err := c.Validate(); err != nil {
 		return nil, fmt.Errorf("controller is invalid: %v", err)
 	}
-	s := &Server{chToken: chToken}
+	s := &Server{chToken:chToken}
 	r := mux.NewRouter()
 	//r.HandleFunc("/",s.Handler)
 	r.HandleFunc("/", s.Handler).Methods(http.MethodPost)
@@ -45,7 +47,7 @@ func New(cfg Config, c *controller.Controller, chToken chan<- string) (*Server, 
 func (s *Server) Run(ctx context.Context) error {
 	go func() {
 		<-ctx.Done()
-		err := s.server.Shutdown(ctx)
+		err := s.server.Shutdown(context.Background())
 		if err != nil {
 			log.Printf("could not gracefully shut down: %v", err)
 		}

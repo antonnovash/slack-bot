@@ -19,11 +19,6 @@ const (
 	envSlackToken     = "SLACK_TOKEN"
 	envServerAddress  = "SERVER_ADDRESS"
 )
-// Config stores info from env vars.
-type Config struct {
-	Slack  slack.Config
-	Server server.Config
-}
 
 func main() {
 	config, err := NewConfig()
@@ -41,7 +36,6 @@ func run(config *Config) error {
 	if err != nil {
 		return fmt.Errorf("cannot create slack connection: %v", err)
 	}
-
 	bot, err := bot.New(config.Slack, slack)
 	if err != nil {
 		return fmt.Errorf("cannot create a bot: %v", err)
@@ -50,7 +44,6 @@ func run(config *Config) error {
 		Slack: slack,
 	}
 	myChan := make(chan string)
-
 	server, err := server.New(config.Server, controller, myChan)
 	if err != nil {
 		return fmt.Errorf("cannot create a server: %v", err)
@@ -59,23 +52,23 @@ func run(config *Config) error {
 	shutdownOnSignal(cancel)
 	errChan := make(chan error, 1)
 	go func() {
-		//config.Slack.Token =  <-myChan
-		token :=  <-myChan
-		fmt.Println(token)
-		err = bot.Run(ctx)
-				if err != nil {
+		err := server.Run(ctx)
+		if err != nil {
 			cancel()
-			errChan <- fmt.Errorf("bot stopped with error: %v", err)
+			errChan <- fmt.Errorf("server stopped with error: %v", err)
 			return
 		}
 		errChan <- nil
 	}()
 
 	go func() {
-		err := server.Run(ctx)
+		token :=  <-myChan
+		config.Slack.Token = token
+		fmt.Println(config.Slack.Token,"kek")
+		err = bot.Run(ctx)
 		if err != nil {
 			cancel()
-			errChan <- fmt.Errorf("server stopped with error: %v", err)
+			errChan <- fmt.Errorf("bot stopped with error: %v", err)
 			return
 		}
 		errChan <- nil
@@ -95,13 +88,21 @@ func shutdownOnSignal(cancel context.CancelFunc) {
 	}()
 }
 
+// Config stores info from env vars.
+type Config struct {
+	Slack  slack.Config
+	Server server.Config
+}
+
 // NewConfig returns a Config struct.
 func NewConfig() (*Config, error) {
+	os.Setenv(envSlackToken, "xoxp-617863072727-604564212419-623675919763-604c125b972fba3e9d5e20067dbe4557")
 	os.Setenv(envSlackChannelID, "CJ3UZQ6P7")
 	os.Setenv(envServerAddress, "localhost:9000")
 	c := &Config{
 
 		Slack: slack.Config{
+			Token:     os.Getenv(envSlackToken),
 			ChannelID: os.Getenv(envSlackChannelID),
 		},
 		Server: server.Config{
