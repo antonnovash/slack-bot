@@ -22,7 +22,11 @@ const (
 	actionSelectMonth = "selectMonth"
 	actionStart       = "start"
 	actionCancel      = "cancel"
-	envSlackToken     = "SLACK_TOKEN"
+	actionSelectDays  = "selectMonth"
+	actionNow         = "now"
+	actionFast        = "fast"
+	actionHelp        = "help"
+	actionCustom      = "custom"
 )
 
 type interactionHandler struct {
@@ -102,6 +106,43 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 		title := fmt.Sprintf(":x: @%s canceled the request", message.User.Name)
 		responseMessage(w, message.OriginalMessage, title, "")
 		return
+	case actionHelp:
+		originalMessage := message.OriginalMessage
+		originalMessage.Attachments[0].Text = fmt.Sprintf("Help! %s ?", strings.Title("Helllp"))
+		originalMessage.Attachments[0].Actions = []slack.AttachmentAction{
+			{
+				Name:  actionNow,
+				Text:  "Now",
+				Type:  "button",
+				Style: "primary",
+			},
+			{
+				Name:  actionFast,
+				Text:  "Fast",
+				Type:  "button",
+				Style: "primary",
+			},
+			{
+				Name:  actionCustom,
+				Text:  "Custom",
+				Type:  "button",
+				Style: "primary",
+			},
+			{
+				Name:  actionHelp,
+				Text:  "Help",
+				Type:  "button",
+				Style: "primary",
+			},
+		}
+
+		w.Header().Add("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(&originalMessage)
+		responseMessage(w, message.OriginalMessage, "Aaa", "")
+		return
+
+
 	default:
 		log.Printf("[ERROR] ]Invalid action was submitted: %s", action.Name)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -126,12 +167,19 @@ func responseMessage(w http.ResponseWriter, original slack.Message, title, value
 	json.NewEncoder(w).Encode(&original)
 }
 
-type team struct {
-	ID    string `gorm:"primary_key"`
-	Name  string
-	Scope string `json:"scope"`
-	Token string
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 type slackOauthRequestParams struct {
 	ClientID     string `url:"client_id,omitempty"`
@@ -140,16 +188,7 @@ type slackOauthRequestParams struct {
 	RedirectUri  string `url:"redirect_uri,omitempty"`
 }
 
-type slackOauthRequestResponse struct {
-	AccessToken string `json:"access_token"`
-	Scope       string `json:"scope"`
-	TeamName    string `json:"team_name"`
-	TeamID      string `json:"team_id"`
-}
-
 func generateOAuthRequest() (request *http.Request, err error) {
-	_ = os.Setenv("SLACK_CLIENT_ID", "617863072727.609868118610")
-	_ = os.Setenv("SLACK_CLIENT_SECRET", "a39e1d00bbe6ce9a88c191391108600c")
 	params := slackOauthRequestParams{
 		ClientID:     os.Getenv("SLACK_CLIENT_ID"),
 		ClientSecret: os.Getenv("SLACK_CLIENT_SECRET"),
@@ -175,17 +214,6 @@ func (s *Server) Auth(writer http.ResponseWriter, request *http.Request) {
 		http.Error(writer, errorMessage, 501)
 		return
 	}
-	/*var client = &http.Client{
-		Timeout: time.Second * 10,
-	}
-	req, err := http.NewRequest("GET", "https://7247b66d.ngrok.io", nil)
-	code := req.URL.Query()
-	fmt.Println(code)
-	response, err := client.Do(req)
-	if response.StatusCode == http.StatusFound {
-		fmt.Println(response.Location())
-	}*/
-	//fmt.Println(code)
 	return
 }
 
