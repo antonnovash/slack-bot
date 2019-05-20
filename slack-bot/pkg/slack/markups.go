@@ -1,6 +1,9 @@
 package slack
 
-import "github.com/nlopes/slack"
+import (
+	"github.com/nlopes/slack"
+	"time"
+)
 
 const (
 	// action is used for slack attament action.
@@ -12,6 +15,38 @@ const (
 	actionCustom      = "custom"
 	actionStart       = "start"
 )
+
+/*[
+{
+"type": "section",
+"text": {
+"type": "mrkdwn",
+"text": "Pick a date for the deadline."
+},
+"accessory": {
+"type": "datepicker",
+"initial_date": "1990-04-28",
+"placeholder": {
+"type": "plain_text",
+"text": "Select a date",
+"emoji": true
+}
+}
+}
+]*/
+var t = time.Now()
+var block = slack.ActionBlock{
+
+}
+var datepicker = slack.DatePickerBlockElement{
+	Type:        "datepicker",
+	ActionID:    actionCustom,
+	InitialDate: "1990-04-28",
+	Placeholder: &slack.TextBlockObject{
+		Type: "plain_text",
+		Text: "Select a date",
+	},
+}
 
 var ListButtonAction = []slack.AttachmentAction{
 	{

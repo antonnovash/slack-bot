@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	markups "slack-bot/slack-bot/pkg/slack"
 	"strings"
 )
 
@@ -29,13 +30,14 @@ const (
 	actionCustom      = "custom"
 )
 
+var message slack.InteractionCallback
+
 type interactionHandler struct {
 	slackClient       *slack.Client
 	verificationToken string
 }
 
 func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
-	log.Println("lel")
 	if r.Method != http.MethodPost {
 		log.Printf("[ERROR] Invalid method: %s", r.Method)
 		w.WriteHeader(http.StatusMethodNotAllowed)
@@ -56,7 +58,6 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var message slack.InteractionCallback
 	if err := json.Unmarshal([]byte(jsonStr), &message); err != nil {
 		log.Printf("[ERROR] Failed to decode json message from slack: %s", jsonStr)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -107,42 +108,26 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 		responseMessage(w, message.OriginalMessage, title, "")
 		return
 	case actionHelp:
+		title := fmt.Sprintf("Help List")
 		originalMessage := message.OriginalMessage
-		originalMessage.Attachments[0].Text = fmt.Sprintf("Help! %s ?", strings.Title("Helllp"))
-		originalMessage.Attachments[0].Actions = []slack.AttachmentAction{
-			{
-				Name:  actionNow,
-				Text:  "Now",
-				Type:  "button",
-				Style: "primary",
-			},
-			{
-				Name:  actionFast,
-				Text:  "Fast",
-				Type:  "button",
-				Style: "primary",
-			},
-			{
-				Name:  actionCustom,
-				Text:  "Custom",
-				Type:  "button",
-				Style: "primary",
-			},
-			{
-				Name:  actionHelp,
-				Text:  "Help",
-				Type:  "button",
-				Style: "primary",
-			},
-		}
+		originalMessage.Attachments[0].Text = title
+		originalMessage.Attachments[0].Fields = markups.HelpList
+		originalMessage.Attachments[0].Actions = markups.ListButtonAction
 
 		w.Header().Add("Content-type", "application/json")
 		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(&originalMessage)
-		responseMessage(w, message.OriginalMessage, "Aaa", "")
+		//responseMessage(w, originalMessage, title, "")
 		return
+	case actionCustom:
+		title := fmt.Sprintf("Chose the date")
+		originalMessage := message.OriginalMessage
+		originalMessage.Attachments[0].Text = title
+		originalMessage.Attachments[0].Fields = markups.HelpList
 
-
+		w.Header().Add("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		_ = json.NewEncoder(w).Encode(&originalMessage)
 	default:
 		log.Printf("[ERROR] ]Invalid action was submitted: %s", action.Name)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -166,20 +151,6 @@ func responseMessage(w http.ResponseWriter, original slack.Message, title, value
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&original)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 type slackOauthRequestParams struct {
 	ClientID     string `url:"client_id,omitempty"`

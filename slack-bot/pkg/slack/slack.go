@@ -23,7 +23,6 @@ func New(c Config) (*SlackListener, error) {
 
 // handleMesageEvent handles message events.
 func (s *SlackListener) HandleMessageEvent(ev *slack.MessageEvent) error {
-
 	// Only response in specific channel. Ignore else.
 	/*	if ev.Channel != s.channelID {
 		log.Printf("%s %s", ev.Channel, ev.Msg.Text)
@@ -79,7 +78,15 @@ func (s *SlackListener) HandleMessageCustom(ev *slack.MessageEvent) error {
 			},
 		},
 	}
-
+	attachmentCalendar := slack.SectionBlock{
+		Type:    "actions",
+		BlockID: actionCustom,
+		Accessory:datepicker,
+	}
+	paramsCalendar := slack.MsgOptionBlocks(attachmentCalendar)
+	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("", false), paramsCalendar); err != nil {
+		return fmt.Errorf("failed to post message: %s", err)
+	}
 	paramsMonth := slack.MsgOptionAttachments(attachmentMonth)
 	paramsDays := slack.MsgOptionAttachments(attachmentDays)
 	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("", false), paramsMonth); err != nil {
