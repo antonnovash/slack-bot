@@ -28,6 +28,7 @@ const (
 	actionFast        = "fast"
 	actionHelp        = "help"
 	actionCustom      = "custom"
+	actionCalendar    = "calendar"
 )
 
 var message slack.InteractionCallback
@@ -57,7 +58,7 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-
+	fmt.Println(jsonStr)
 	if err := json.Unmarshal([]byte(jsonStr), &message); err != nil {
 		log.Printf("[ERROR] Failed to decode json message from slack: %s", jsonStr)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -110,6 +111,10 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 	case actionHelp:
 		title := fmt.Sprintf("Help List")
 		originalMessage := message.OriginalMessage
+		/*if originalMessage.Text == "" {
+			log.Println("text nil")
+			break
+		}*/
 		originalMessage.Attachments[0].Text = title
 		originalMessage.Attachments[0].Fields = markups.HelpList
 		originalMessage.Attachments[0].Actions = markups.ListButtonAction
@@ -119,14 +124,9 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 		_ = json.NewEncoder(w).Encode(&originalMessage)
 		//responseMessage(w, originalMessage, title, "")
 		return
-	case actionCustom:
-		title := fmt.Sprintf("Chose the date")
+	case actionCalendar:
 		originalMessage := message.OriginalMessage
-		originalMessage.Attachments[0].Text = title
-		originalMessage.Attachments[0].Fields = markups.HelpList
-
-		w.Header().Add("Content-type", "application/json")
-		w.WriteHeader(http.StatusOK)
+		originalMessage.Attachments[0].Actions = markups.ListTimeAction
 		_ = json.NewEncoder(w).Encode(&originalMessage)
 	default:
 		log.Printf("[ERROR] ]Invalid action was submitted: %s", action.Name)

@@ -54,7 +54,7 @@ func (s *SlackListener) HandleMessageEvent(ev *slack.MessageEvent) error {
 }
 func (s *SlackListener) HandleMessageCustom(ev *slack.MessageEvent) error {
 	// value is passed to message handler when request is approved.
-	attachmentMonth := slack.Attachment{
+	/*attachmentMonth := slack.Attachment{
 		Text:       "Month",
 		Color:      "#72e004",
 		CallbackID: "Month",
@@ -78,24 +78,30 @@ func (s *SlackListener) HandleMessageCustom(ev *slack.MessageEvent) error {
 			},
 		},
 	}
-	attachmentCalendar := slack.SectionBlock{
-		Type:    "actions",
-		BlockID: actionCustom,
-		Accessory:datepicker,
-	}
-	paramsCalendar := slack.MsgOptionBlocks(attachmentCalendar)
-	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("", false), paramsCalendar); err != nil {
-		return fmt.Errorf("failed to post message: %s", err)
-	}
+
 	paramsMonth := slack.MsgOptionAttachments(attachmentMonth)
+	fmt.Println(paramsMonth)
 	paramsDays := slack.MsgOptionAttachments(attachmentDays)
-	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("", false), paramsMonth); err != nil {
+	if _, _, err := s.client.PostMessage(ev.Channel, paramsMonth); err != nil {
 		return fmt.Errorf("failed to post message: %s", err)
 	}
 	if _, _, err := s.client.PostMessage(ev.Channel, slack.MsgOptionText("", false), paramsDays); err != nil {
 		return fmt.Errorf("failed to post message: %s", err)
+	}*/
+	paramsCalendar := slack.MsgOptionBlocks(Calendar)
+	fmt.Println(paramsCalendar)
+	if _, _, err := s.client.PostMessage(ev.Channel, paramsCalendar); err != nil {
+		return fmt.Errorf("failed to post message: %s", err)
 	}
-
+	attachmentListOfButtons := slack.Attachment{
+		CallbackID: "BlaBla",
+		Actions:    ListButtonAction,
+	}
+	paramsCalendarButton := slack.MsgOptionAttachments(attachmentListOfButtons)
+	fmt.Println(paramsCalendar)
+	if _, _, err := s.client.PostMessage(ev.Channel, paramsCalendarButton); err != nil {
+		return fmt.Errorf("failed to post message: %s", err)
+	}
 	return nil
 }
 func (s *SlackListener) HandleMessageHelp(ev *slack.MessageEvent) error {
