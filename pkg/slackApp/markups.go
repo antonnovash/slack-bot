@@ -1,4 +1,4 @@
-package slack
+package slackApp
 
 import (
 	"github.com/nlopes/slack"

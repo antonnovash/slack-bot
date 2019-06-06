@@ -1,0 +1,25 @@
+version: '3'
+services:
+  database:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    command: mongod
+  slack-bot:
+    image: ""
+    environment:
+    - SLACKBOT_EXCHANGE_USER=Anton.Novash@itechart-group.com
+    - SLACKBOT_EXCHANGE_PASS=ANTONnovash11
+    - SLACKBOT_BOT_TOKEN=xoxp-617863072727-604564212419-623675919763-604c125b972fba3e9d5e40067dbe4557
+    - SLACKBOT_CHANNEL_ID=CJ3UZQ6P7
+    - SLACKBOT_SERVER_ADDRESS=localhost:9000
+    - SLACKBOT_CLIENT_ID=617863072727.609868118610
+    - SLACKBOT_CLIENT_SECRET=a39e1d00bbe6ce9a88c191391108600c
+    - SLACKBOT_CONNECTION_STRING=database
+    - SLACKBOT_EXCHANGE_URL=https://webmail.itechart-group.com/ews/Exchange.asmx
+    - SLACKBOT_EXCHANGE_NEW_MEETING_DAYS_LIMIT=120
+    - SLACKBOT_BOT_NAME=Worker
+    - SLACKBOT_ROOM_BLACKLIST=Room0709@itechart-group.com,Room1301-6@itechart-group.com
+depends_on:
+  - database
+entrypoint: ["/slack-bot"]

@@ -2,12 +2,12 @@ package controller
 
 import (
 	"fmt"
-	"slack-bot/slack-bot/pkg/slack"
+	"slack-bot/slack-bot/pkg/slackApp"
 )
 
 // Controller contains connections to Exchange, YouTube and Slack bot.
 type Controller struct {
-	Slack    *slack.SlackListener
+	Slack    *slackApp.SlackListener
 }
 
 // Validate checks if all field are not nil.

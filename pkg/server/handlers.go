@@ -14,7 +14,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	markups "slack-bot/slack-bot/pkg/slack"
+	markups "slack-bot/slack-bot/pkg/slackApp"
 	"strings"
 )
 

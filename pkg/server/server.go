@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"slack-bot/slack-bot/pkg/controller"
 
 	"github.com/gorilla/mux"
-	"slack-bot/slack-bot/pkg/controller"
 )
 
 // TODO: add logger
@@ -20,10 +20,8 @@ type Server struct {
 }
 
 // New creates a new instance of Server which is HTTP server with custom handler and a controller.
-func New(cfg Config, chToken chan<- string) (*Server, error) {
-	if err := cfg.Validate(); err != nil {
-		return nil, fmt.Errorf("config is invalid: %v", err)
-	}
+func New(Address string, chToken chan<- string) (*Server, error) {
+	//TODO validation
 	s := &Server{chToken:chToken}
 	r := mux.NewRouter()
 	//r.HandleFunc("/",s.Handler)
@@ -31,9 +29,9 @@ func New(cfg Config, chToken chan<- string) (*Server, error) {
 	r.HandleFunc("/add", s.addToSlack).Methods(http.MethodConnect, http.MethodGet)
 	r.HandleFunc("/auth", s.auth).Methods(http.MethodGet)
 	r.HandleFunc("/home", s.home).Methods(http.MethodGet)
-	log.Println(cfg.Address)
+	log.Println(Address)
 	s.server = &http.Server{
-		Addr:    cfg.Address,
+		Addr:    Address,
 		Handler: r,
 	}
 	return s, nil

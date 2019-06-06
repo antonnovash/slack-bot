@@ -1,8 +1,9 @@
-package slack
+package slackApp
 
 import (
 	"fmt"
 	"github.com/nlopes/slack"
+	"slack-bot/slack-bot/pkg/config"
 	"strings"
 )
 
@@ -12,11 +13,9 @@ type SlackListener struct {
 	rtm       *slack.RTM
 }
 
-func New(c Config) (*SlackListener, error) {
-	if err := c.Validate(); err != nil {
-		return nil, fmt.Errorf("config is invalid: %v", err)
-	}
-	client := slack.New(c.Token)
+func New(c *config.Config) (*SlackListener, error) {
+	//TODO add validation
+	client := slack.New(c.BotToken)
 	rtm := client.NewRTM()
 	return &SlackListener{client: client, channelID: c.ChannelID, rtm: rtm}, nil
 }
