@@ -19,7 +19,41 @@ func New(c *config.Config) (*SlackListener, error) {
 	rtm := client.NewRTM()
 	return &SlackListener{client: client, channelID: c.ChannelID, rtm: rtm}, nil
 }
+func (s *SlackListener) ProccesCallbackQuery(ev *slack.InteractionCallback) error {
+	switch ev.CallbackID {
+	/*case "start":
+		_ = s.HandleMessageStart(ev)
+	case "custom":
+		_ = s.HandleMessageCustom(ev)*/
+	/*case "fast":
+		_ = s.HandleMessageFast(ev)
+	case "now":
+		_ = s.HandleMessageNow(ev)*/
+	case "help":
+		_ = s.HandleHelp(ev)
+	default:
+		return nil
+	}
+	return nil
+}
+func (s *SlackListener) HandleHelp(ev *slack.InteractionCallback) error {
+	// value is passed to message handler when request is approved.
+	attachmentHelp := slack.Attachment{
+		Text:       "Help list:",
+		Color:      "#72e004",
+		CallbackID: "help",
+		Fields:     HelpList,
+		Actions:    ListButtonAction,
+	}
 
+	paramsHelp := slack.MsgOptionAttachments(attachmentHelp)
+
+	if _, _, err := s.client.PostMessage(ev.Message.Channel, slack.MsgOptionText("", false), paramsHelp); err != nil {
+		return fmt.Errorf("failed to post message: %s", err)
+	}
+
+	return nil
+}
 // handleMesageEvent handles message events.
 func (s *SlackListener) HandleMessageEvent(ev *slack.MessageEvent) error {
 	// Only response in specific channel. Ignore else.

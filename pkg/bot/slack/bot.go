@@ -5,11 +5,8 @@ import (
 	"fmt"
 	slackapi "github.com/nlopes/slack"
 	"log"
-	"os"
-	"os/signal"
 	"slack-bot/slack-bot/pkg/config"
 	"slack-bot/slack-bot/pkg/slackApp"
-	"syscall"
 	"time"
 )
 
@@ -56,7 +53,7 @@ func (s *SlackBot) BotRun() {
 	err := s.Run(ctx)
 	if err != nil {
 		cancel()
-		fmt.Errorf("bot stopped with error: %v", err)
+		log.Println("bot stopped with error: %v", err)
 		return
 	}
 }
@@ -77,7 +74,9 @@ func (s *SlackBot) Run(ctx context.Context) error {
 				log.Printf("slack runtime error: %s, %d, %v", event.Msg, event.Code, event.Error())
 			case *slackapi.InvalidAuthEvent:
 				return fmt.Errorf("invalid credentials")
+
 			}
+
 		case <-ctx.Done():
 			err := s.rtm.Disconnect()
 			if err != nil {
@@ -86,13 +85,4 @@ func (s *SlackBot) Run(ctx context.Context) error {
 			return nil
 		}
 	}
-}
-func shutdownOnSignal(cancel context.CancelFunc) {
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
-	go func() {
-		sig := <-stop
-		cancel()
-		log.Printf("Shutting down due to signal: %v", sig)
-	}()
 }

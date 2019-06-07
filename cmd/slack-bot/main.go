@@ -25,20 +25,23 @@ func main() {
 		log.Fatal(err)
 	}
 	//TODO Add Exchange,Outlook,DB connection
+	/*err := ServerRun(c)
+	if err != nil {
+		log.Fatal(err)
+	}*/
+	ServerRun(c)
 	s, err := customize(c)
-	err = ServerRun(c)
-	fmt.Println(c)
 	if err != nil {
 		log.Fatal(err)
 	}
 	s.BotRun()
 }
-func ServerRun(c *config.Config) error {
+func ServerRun(c *config.Config)  {
 	myChan := make(chan string)
-	server, err := server.New(c.ServerAddress, myChan)
-	if err != nil {
+	server, _ := server.New(c.ServerAddress, myChan)
+	/*if err != nil {
 		return fmt.Errorf("cannot connect to Server %v", err)
-	}
+	}*/
 	ctx, cancel := context.WithCancel(context.Background())
 	shutdownOnSignal(cancel)
 	errChan := make(chan error, 1)
@@ -54,9 +57,7 @@ func ServerRun(c *config.Config) error {
 	token := <-myChan
 	log.Println("successful token received")
 	c.BotToken = token
-	return nil
 }
-
 
 func customize(c *config.Config) (*slack.SlackBot, error) {
 	slackApps, err := slackApp.New(c)

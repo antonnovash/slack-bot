@@ -20,7 +20,7 @@ type Config struct {
 	// ExchangeURL is an URL that used to connect to exchange server
 	ExchangeURL string `split_words:"true" required:"true"`
 	// Slack bot api token
-	BotToken    string `split_words:"true" required:"true"`
+	BotToken string `split_words:"true" required:"true"`
 	//SlackChannelID
 	ChannelID string `split_words:"true" required:"true"`
 	//ServerAddress

@@ -28,7 +28,6 @@ const (
 	actionFast        = "fast"
 	actionHelp        = "help"
 	actionCustom      = "custom"
-	actionCalendar    = "calendar"
 )
 
 var message slack.InteractionCallback
@@ -124,10 +123,16 @@ func (s *Server) Handler(w http.ResponseWriter, r *http.Request) {
 		_ = json.NewEncoder(w).Encode(&originalMessage)
 		//responseMessage(w, originalMessage, title, "")
 		return
-	case actionCalendar:
+	case actionCustom://TODO erorr for another type
 		originalMessage := message.OriginalMessage
+		paramsCalendar := slack.MsgOptionBlocks(markups.Calendar)
 		originalMessage.Attachments[0].Actions = markups.ListTimeAction
+		//originalMessage.Attachments[0].Actions = markups.ListButtonAction
+		w.Header().Add("Content-type", "application/json")
+		w.WriteHeader(http.StatusOK)
 		_ = json.NewEncoder(w).Encode(&originalMessage)
+		_ = json.NewEncoder(w).Encode(&paramsCalendar)
+
 	default:
 		log.Printf("[ERROR] ]Invalid action was submitted: %s", action.Name)
 		w.WriteHeader(http.StatusInternalServerError)

@@ -22,7 +22,7 @@ type Server struct {
 // New creates a new instance of Server which is HTTP server with custom handler and a controller.
 func New(Address string, chToken chan<- string) (*Server, error) {
 	//TODO validation
-	s := &Server{chToken:chToken}
+	s := &Server{chToken: chToken}
 	r := mux.NewRouter()
 	//r.HandleFunc("/",s.Handler)
 	r.HandleFunc("/", s.Handler).Methods(http.MethodPost)
@@ -39,6 +39,7 @@ func New(Address string, chToken chan<- string) (*Server, error) {
 
 // Run starts an HTTP server under the hood of Server.
 func (s *Server) Run(ctx context.Context) error {
+	log.Println("server run")
 	go func() {
 		<-ctx.Done()
 		err := s.server.Shutdown(context.Background())

@@ -7,7 +7,7 @@ import (
 
 // Controller contains connections to Exchange, YouTube and Slack bot.
 type Controller struct {
-	Slack    *slackApp.SlackListener
+	Slack *slackApp.SlackListener
 }
 
 // Validate checks if all field are not nil.
